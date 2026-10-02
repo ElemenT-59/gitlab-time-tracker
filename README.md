@@ -55,6 +55,25 @@ npm run dist:mac
 npm run electron
 ```
 
+## Windows-приложение
+
+Собрать установщик Windows (NSIS) и portable-версию можно на Windows или на
+macOS/Linux с настроенным окружением для кросс-сборки:
+
+```bash
+npm install
+npm run dist:win
+```
+
+Готовые файлы появятся в `release/`:
+- `GitLab Time Tracker Setup *.exe` — установщик с выбором папки и ярлыками.
+- `GitLab Time Tracker *.exe` — portable-версия, не требующая установки.
+
+Приложение не подписано сертификатом Windows Authenticode, поэтому Windows
+SmartScreen может показать предупреждение при первом запуске. Это ожидаемо для
+локальной сборки; для распространения среди пользователей подпишите установщик
+сертификатом издателя.
+
 ## Подключение GitLab
 
 1. В GitLab: **User Settings → Access Tokens**, создайте токен со scope
