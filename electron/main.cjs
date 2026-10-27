@@ -105,15 +105,7 @@ function serveStatic(req, res) {
 // the app still works.
 const PREFERRED_PORT = 47823
 
-// On macOS, clicking the window's close button quits the window but not the
-// app (see window-all-closed below) — the process, and this server, keep
-// running in the Dock. Clicking the Dock icon again fires `activate`, which
-// used to call startServer() a second time; that tried to rebind
-// PREFERRED_PORT, failed because the still-running server already held it,
-// and fell back to a random port — a new origin with no access to the
-// localStorage settings saved under the original one. Caching the promise
-// makes startServer() a singleton for the process lifetime: activate reuses
-// the same server/port instead of racing a second one into existence.
+// Reuse the same server/port if window creation is requested more than once.
 let serverPromise = null
 
 function startServer() {
@@ -161,6 +153,8 @@ async function createWindow() {
     },
   })
 
+  if (process.platform === 'win32') mainWindow.setMenu(null)
+
   mainWindow.loadURL(`http://127.0.0.1:${port}`)
 }
 
@@ -173,5 +167,5 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
+  app.quit()
 })
